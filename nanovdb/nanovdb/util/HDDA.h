@@ -381,7 +381,7 @@ inline __hostdev__ bool firstActive(RayT& ray, AccT& acc, Coord &ijk, float& t)
     ijk = RoundDown<Coord>(ray.start()); // first voxel inside bbox
     for (HDDA<RayT, Coord> hdda(ray, acc.getDim(ijk, ray)); !acc.isActive(ijk); hdda.update(ray, acc.getDim(ijk, ray))) {
         if (!hdda.step()) return false;// leap-frog HDDA and exit if ray bound is exceeded
-        t = hdda.time() + Delta;// update time
+        t = hdda.time() * Delta;// update time
         ijk = RoundDown<Coord>( ray(t) );// update ijk
     }
     return true;
