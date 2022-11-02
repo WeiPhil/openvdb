@@ -376,7 +376,8 @@ inline __hostdev__ bool firstActive(RayT& ray, AccT& acc, Coord &ijk, float& t)
     if (!ray.clip(acc.root().bbox()) || ray.t1() > 1e20) {// clip ray to bbox
         return false;// missed or undefined bbox
     }
-    static const float Delta = 1.0001f;// forward step-size along the ray to avoid getting stuck
+    static const float Delta = 0.005f;// forward step-size along the ray to avoid getting stuck
+    ray.setMinTime(ray.t0() - 0.0001f);// step back a small delta to avoid missing a first voxel at the edge of the bbox
     t = ray.t0();// initiate time
     ijk = RoundDown<Coord>(ray.start()); // first voxel inside bbox
     for (HDDA<RayT, Coord> hdda(ray, acc.getDim(ijk, ray)); !acc.isActive(ijk); hdda.update(ray, acc.getDim(ijk, ray))) {
